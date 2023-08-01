@@ -1,4 +1,4 @@
-package com.example.weatherappproject;
+package com.example.weatherappproject.view;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -17,9 +17,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import com.example.weatherappproject.viewmodel.LoginRegisterViewModel;
+import com.example.weatherappproject.R;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.time.Duration;
 
 public class LoginRegisterFragment extends Fragment {
     private EditText emailEditText;

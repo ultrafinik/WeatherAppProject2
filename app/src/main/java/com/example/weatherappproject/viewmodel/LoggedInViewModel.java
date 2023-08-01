@@ -1,4 +1,4 @@
-package com.example.weatherappproject;
+package com.example.weatherappproject.viewmodel;
 
 import android.app.Application;
 

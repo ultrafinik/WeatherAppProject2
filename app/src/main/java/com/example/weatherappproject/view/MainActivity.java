@@ -1,4 +1,4 @@
-package com.example.weatherappproject;
+package com.example.weatherappproject.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.example.weatherappproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

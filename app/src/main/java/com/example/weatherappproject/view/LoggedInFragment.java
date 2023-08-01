@@ -1,4 +1,4 @@
-package com.example.weatherappproject;
+package com.example.weatherappproject.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,9 +15,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import com.example.weatherappproject.viewmodel.LoggedInViewModel;
+import com.example.weatherappproject.R;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.time.Duration;
 
 public class LoggedInFragment extends Fragment {
     private TextView loggedInUserTextView;

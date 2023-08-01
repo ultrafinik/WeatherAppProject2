@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginRegisterFragment"
-        android:name="com.example.weatherappproject.LoggedInFragment"
+        android:name="com.example.weatherappproject.view.LoggedInFragment"
         android:label="LoginRegisterFragment"
         tools:ignore="MissingClass">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/loggedInFragment"
-        android:name="com.example.weatherappproject.LoginRegisterFragment"
+        android:name="com.example.weatherappproject.view.LoginRegisterFragment"
         android:label="LoggedInFragment" >
         <action
             android:id="@+id/action_loggedInFragment_to_loginRegisterFragment"
