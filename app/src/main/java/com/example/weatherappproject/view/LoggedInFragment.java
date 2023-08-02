@@ -1,5 +1,6 @@
 package com.example.weatherappproject.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,11 @@ public class LoggedInFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if (firebaseUser != null) {
-                    loggedInUserTextView.setText("Logged In User: " + firebaseUser.getEmail());
-                    logOutButton.setEnabled(true);
+//                    loggedInUserTextView.setText("Logged In User: " + firebaseUser.getEmail());
+//                    logOutButton.setEnabled(true);
+                    Intent intent=new Intent(getContext(), WheatherActivity.class);
+                    intent.putExtra("name",firebaseUser.getDisplayName());
+                    startActivity(intent);
                 } else {
                     logOutButton.setEnabled(false);
                 }
