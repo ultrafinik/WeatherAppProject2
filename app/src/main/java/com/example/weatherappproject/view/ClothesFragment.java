@@ -44,8 +44,10 @@ public class ClothesFragment extends Fragment {
             else if(time.getHour()>9&&time.getHour()<16) timesOfDay.setText(getResources().getString(R.string.good_afternoon));
             else timesOfDay.setText(getResources().getString(R.string.good_evening));
             Bundle extras=getActivity().getIntent().getExtras();
-            if(extras!=null)
+            if(extras!=null) {
+                String name= extras.getString("name");
                 nameUser.setText(extras.getString("name"));
+            }
         return view;
     }
 }
