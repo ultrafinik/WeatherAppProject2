@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoggedInFragment extends Fragment {
+    public static final String NAME_EXTRA="name";
+    private String nameUser;
     private TextView loggedInUserTextView;
     private Button logOutButton;
 
@@ -41,8 +43,7 @@ public class LoggedInFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if (firebaseUser != null) {
-//                    loggedInUserTextView.setText("Logged In User: " + firebaseUser.getEmail());
-//                    logOutButton.setEnabled(true);
+                    logOutButton.setEnabled(true);
                     Intent intent=new Intent(getContext(), WheatherActivity.class);
                     FirebaseDatabase database=FirebaseDatabase.getInstance();
                     DatabaseReference myRef=database.getReference().child("users");
@@ -52,7 +53,13 @@ public class LoggedInFragment extends Fragment {
                             for(DataSnapshot datas: snapshot.getChildren())
                             {
                                 String email=datas.child("email").getValue().toString();
-                                String name=datas.child("name").getValue().toString();
+                                if(email.equals(firebaseUser.getEmail()))
+                                {
+                                    nameUser=datas.child("name").getValue().toString();
+                                    intent.putExtra(NAME_EXTRA,nameUser);
+                                    startActivity(intent);
+                                    break;
+                                }
                             }
                         }
 
@@ -61,8 +68,7 @@ public class LoggedInFragment extends Fragment {
 
                         }
                     });
-                    intent.putExtra("name",firebaseUser.getDisplayName());
-                    startActivity(intent);
+
                 } else {
                     logOutButton.setEnabled(false);
                 }
