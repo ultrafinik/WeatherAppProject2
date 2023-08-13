@@ -1,12 +1,19 @@
 package com.example.weatherappproject.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.weatherappproject.api.NetworkService;
+import com.example.weatherappproject.model.MainWeather;
 import com.google.firebase.auth.FirebaseUser;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoggedInViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
@@ -31,5 +38,28 @@ public class LoggedInViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getLoggedOutLiveData() {
         return loggedOutLiveData;
+    }
+    private MutableLiveData<MainWeather> weather;
+    private void LoadData()
+    {
+        NetworkService.getInstance().getJSONApi().getWeatherByCity("Улан-Удэ",NetworkService.KEY,"metric","ru").enqueue(new Callback<MainWeather>() {
+            @Override
+            public void onResponse(Call<MainWeather> call, Response<MainWeather> response) {
+                MainWeather weatherNow=response.body();
+                weather.setValue(weatherNow);
+            }
+
+            @Override
+            public void onFailure(Call<MainWeather> call, Throwable t) {
+                Log.d("error",t.getMessage());
+            }
+        });
+    }
+    public MutableLiveData<MainWeather> getWeather(){
+        if(weather==null){
+            weather=new MutableLiveData<>();
+            LoadData();
+        }
+        return weather;
     }
 }

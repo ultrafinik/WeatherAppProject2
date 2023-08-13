@@ -9,7 +9,7 @@ public class MainWeather {
     private Coord coord;
     @SerializedName("weather")
     @Expose
-    private Weather weather;
+    private Weather[] weather;
     @SerializedName("base")
     @Expose
     private String base;
@@ -52,11 +52,11 @@ public class MainWeather {
         this.coord = coord;
     }
 
-    public Weather getWeather() {
+    public Weather[] getWeather() {
         return weather;
     }
 
-    public void setWeather(Weather weather) {
+    public void setWeather(Weather[] weather) {
         this.weather = weather;
     }
 
