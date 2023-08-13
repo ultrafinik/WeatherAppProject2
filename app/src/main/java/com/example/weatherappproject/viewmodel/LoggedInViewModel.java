@@ -42,7 +42,7 @@ public class LoggedInViewModel extends AndroidViewModel {
     private MutableLiveData<MainWeather> weather;
     private void LoadData()
     {
-        NetworkService.getInstance().getJSONApi().getWeatherByCity("Улан-Удэ",NetworkService.KEY,"metric","ru").enqueue(new Callback<MainWeather>() {
+        NetworkService.getInstance().getJSONApi().getWeatherByCity("Калининград",NetworkService.KEY,"metric","ru").enqueue(new Callback<MainWeather>() {
             @Override
             public void onResponse(Call<MainWeather> call, Response<MainWeather> response) {
                 MainWeather weatherNow=response.body();

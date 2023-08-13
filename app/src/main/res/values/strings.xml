@@ -5,4 +5,7 @@
     <string name="good_morning">Доброе утро</string>
     <string name="good_afternoon">Добрый день</string>
     <string name="good_evening">Добрый вечер</string>
+    <string name="weather">По погоде</string>
+    <string name="all">Все</string>
+    <string name="profile">Профиль</string>
 </resources>

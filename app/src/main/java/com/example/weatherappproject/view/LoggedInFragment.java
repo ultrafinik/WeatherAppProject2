@@ -42,7 +42,7 @@ public class LoggedInFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loggedin, container, false);
-            logOutButton = view.findViewById(R.id.fragment_loggedin_logOut);
+          //  logOutButton = view.findViewById(R.id.fragment_loggedin_logOut);
             TextView timesOfDay = view.findViewById(R.id.TimesOfDay);
             nameUser=view.findViewById(R.id.nameUser);
             dayWeather=view.findViewById(R.id.dayWeather);
@@ -50,13 +50,12 @@ public class LoggedInFragment extends Fragment {
             if(time.getHour()>0&&time.getHour()<9) timesOfDay.setText(getResources().getString(R.string.good_morning));
             else if(time.getHour()>9&&time.getHour()<16) timesOfDay.setText(getResources().getString(R.string.good_afternoon));
             else timesOfDay.setText(getResources().getString(R.string.good_evening));
-            Bundle extras=getActivity().getIntent().getExtras();
             loggedInViewModel= new ViewModelProvider(getActivity()).get(LoggedInViewModel.class);
             loggedInViewModel.getUserLiveData().observe(getActivity(), new Observer<FirebaseUser>() {
                 @Override
                 public void onChanged(FirebaseUser firebaseUser) {
                     if (firebaseUser != null) {
-                        logOutButton.setEnabled(true);
+                       // logOutButton.setEnabled(true);
                         FirebaseDatabase database=FirebaseDatabase.getInstance();
                         DatabaseReference myRef=database.getReference().child("users");
                         myRef.addValueEventListener(new ValueEventListener() {
@@ -100,15 +99,15 @@ public class LoggedInFragment extends Fragment {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onChanged(MainWeather mainWeather) {
-                        dayWeather.setText(Float.toString(mainWeather.getMain().getTemp()));
+                        dayWeather.setText(Integer.toString(Math.round(mainWeather.getMain().getTemp())));
                     }
                 });
-                logOutButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        loggedInViewModel.logOut();
-                    }
-                });
+//                logOutButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        loggedInViewModel.logOut();
+//                    }
+//                });
             return view;
         }
 }

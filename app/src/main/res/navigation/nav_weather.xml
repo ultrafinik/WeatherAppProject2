@@ -2,21 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_weather"
-    app:startDestination="@id/clothesFragment">
-    <fragment
-        android:id="@+id/clothesFragment"
-        android:name="com.example.weatherappproject.view.ClothesFragment"
-        android:label="ClothesFragment" >
-        <action
-            android:id="@+id/action_clothesFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-    </fragment>
+    app:startDestination="@id/detailFragment">
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.weatherappproject.view.DetailFragment"
-        android:label="DetailFragment" >
+        android:label="DetailFragment">
         <action
-            android:id="@+id/action_detailFragment_to_clothesFragment"
-            app:destination="@id/clothesFragment" />
+            android:id="@+id/action_DetailFragment_to_AllFragment"
+            app:destination="@+id/AllFragment"/>
     </fragment>
+    <fragment
+        android:id="@+id/allFragment"
+        android:name="com.example.weatherappproject.view.AllFragment"
+        android:label="AllFragment">
+        <action
+            android:id="@+id/action_allFragment_to_detailFragment"
+            app:destination="@+id/detailFragment"/>
+    </fragment>
+
 </navigation>
