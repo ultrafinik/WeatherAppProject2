@@ -13,7 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nameUser"
-            android:text="Добрый день, Милана"
             android:textAlignment="textEnd"
             />
         <TextView
@@ -36,11 +35,11 @@
                 android:textSize="24sp"
                 android:id="@+id/geo"
                 />
-            <ToggleButton
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:id="@+id/geoOnOff"
+                android:id="@+id/geoButton"
                 />
         </LinearLayout>
     </RelativeLayout>

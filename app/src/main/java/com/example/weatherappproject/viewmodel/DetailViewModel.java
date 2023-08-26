@@ -15,12 +15,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoggedInViewModel extends AndroidViewModel {
+public class DetailViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
     private MutableLiveData<Boolean> loggedOutLiveData;
 
-    public LoggedInViewModel(@NonNull Application application) {
+    public DetailViewModel(@NonNull Application application) {
         super(application);
 
         authAppRepository = new AuthAppRepository(application);
@@ -40,9 +40,9 @@ public class LoggedInViewModel extends AndroidViewModel {
         return loggedOutLiveData;
     }
     private MutableLiveData<MainWeather> weather;
-    private void LoadData()
+    private void LoadData(String city)
     {
-        NetworkService.getInstance().getJSONApi().getWeatherByCity("Калининград",NetworkService.KEY,"metric","ru").enqueue(new Callback<MainWeather>() {
+        NetworkService.getInstance().getJSONApi().getWeatherByCity(city,NetworkService.KEY,"metric","ru").enqueue(new Callback<MainWeather>() {
             @Override
             public void onResponse(Call<MainWeather> call, Response<MainWeather> response) {
                 MainWeather weatherNow=response.body();
@@ -55,10 +55,10 @@ public class LoggedInViewModel extends AndroidViewModel {
             }
         });
     }
-    public MutableLiveData<MainWeather> getWeather(){
+    public MutableLiveData<MainWeather> getWeather(String city){
         if(weather==null){
             weather=new MutableLiveData<>();
-            LoadData();
+            LoadData(city);
         }
         return weather;
     }
