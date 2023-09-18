@@ -8,4 +8,11 @@
     <string name="weather">По погоде</string>
     <string name="all">Все</string>
     <string name="profile">Профиль</string>
+    <string name="enter_weather">Введите город</string>
+    <string name="footwear">footwear</string>
+    <string name="headger">headger</string>
+    <string name="outerwear">outerwear</string>
+    <string name="pants">Pants</string>
+    <string name="shirt">shirt</string>
+    <string name="back">Назад</string>
 </resources>

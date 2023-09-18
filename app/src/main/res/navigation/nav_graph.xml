@@ -19,5 +19,16 @@
         <action
             android:id="@+id/action_loggedInFragment_to_loginRegisterFragment"
             app:destination="@id/loginRegisterFragment" />
+        <action
+            android:id="@+id/action_DetailFragment_to_ComplectFragment"
+            app:destination="@id/complectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/complectFragment"
+        android:name="com.example.weatherappproject.view.ComplectFragment"
+        android:label="ComplectFragment">
+        <action
+            android:id="@+id/action_ComplectFragment_to_DetailFragment"
+            app:destination="@id/loggedInFragment" />
     </fragment>
 </navigation>

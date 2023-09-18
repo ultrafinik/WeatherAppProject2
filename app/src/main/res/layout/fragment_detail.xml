@@ -1,45 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="4dp"
     tools:context=".view.DetailFragment">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#03A9F4">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/nameUser"
-            android:textAlignment="textEnd"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dayWeather"
-            android:layout_below="@+id/nameUser"
-            android:textSize="150sp"
-            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dayWeather"
+            android:id="@+id/hello"
+            android:orientation="horizontal">
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/geoloc"
+                android:layout_weight="4"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameUser"
+                android:padding="10dp"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:textAlignment="textEnd"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/weather"
+            android:layout_below="@id/hello"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/dayWeather"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/nameUser"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="80sp" />
+            <ImageView
+                android:id="@+id/imageWeather"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weather"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/white"
-                android:textSize="24sp"
+                android:hint="@string/enter_weather"
+                android:textSize="26sp"
                 android:id="@+id/geo"
                 />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:text="OK"
                 android:id="@+id/geoButton"
+                android:layout_marginLeft="5dp"
                 />
         </LinearLayout>
     </RelativeLayout>
@@ -47,6 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/weatherComplect"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_weight="1"/>
 
 </LinearLayout>

@@ -27,19 +27,16 @@ public class DetailViewModel extends AndroidViewModel {
         userLiveData = authAppRepository.getUserLiveData();
         loggedOutLiveData = authAppRepository.getLoggedOutLiveData();
     }
-
     public void logOut() {
         authAppRepository.logOut();
     }
-
     public MutableLiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;
     }
-
     public MutableLiveData<Boolean> getLoggedOutLiveData() {
         return loggedOutLiveData;
     }
-    private MutableLiveData<MainWeather> weather;
+    private MutableLiveData<MainWeather> weather=new MutableLiveData<>();
     private void LoadData(String city)
     {
         NetworkService.getInstance().getJSONApi().getWeatherByCity(city,NetworkService.KEY,"metric","ru").enqueue(new Callback<MainWeather>() {
@@ -56,10 +53,7 @@ public class DetailViewModel extends AndroidViewModel {
         });
     }
     public MutableLiveData<MainWeather> getWeather(String city){
-        if(weather==null){
-            weather=new MutableLiveData<>();
             LoadData(city);
-        }
-        return weather;
+            return weather;
     }
 }
