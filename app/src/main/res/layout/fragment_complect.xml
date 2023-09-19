@@ -10,58 +10,55 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
-            <ImageView
+            android:padding="10dp">
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
                 android:id="@+id/footwear_image"
-                android:visibility="gone"/>
-            <Button
-                android:id="@+id/button_footwear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/footwear"
-                />
-            <ImageView
+                android:background="@drawable/custom_red_button"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@android:drawable/btn_plus"/>
+
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/headgear_image"
-                android:visibility="gone"/>
-            <Button
-                android:id="@+id/button_headger"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/headger"/>
-            <ImageView
+                android:scaleType="fitCenter"
+                android:background="@drawable/custom_red_button"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@android:drawable/btn_plus"/>
+
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/outerwear_image"
-                android:visibility="gone"/>
-            <Button
-                android:id="@+id/button_outerwear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/outerwear"/>
-            <ImageView
+                android:src="@android:drawable/btn_plus"
+                android:background="@drawable/custom_red_button"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="fitCenter"/>
+
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/pants_image"
-                android:visibility="gone"/>
-            <Button
-                android:id="@+id/button_pants"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/pants"
-                />
-            <ImageView
+                android:src="@android:drawable/btn_plus"
+                android:background="@drawable/custom_red_button"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="fitCenter"/>
+
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/shirt_image"
-                android:visibility="gone"/>
-            <Button
-                android:id="@+id/button_shirt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/shirt"/>
+                android:src="@android:drawable/btn_plus"
+                android:background="@drawable/custom_red_button"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="fitCenter"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
