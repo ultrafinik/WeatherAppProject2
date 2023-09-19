@@ -63,13 +63,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/shirt"/>
-            <Button
-                android:id="@+id/ok_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="@color/red"
-                android:textColor="@color/black"
-                android:text="@string/back"
-                />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

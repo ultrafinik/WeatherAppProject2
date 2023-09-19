@@ -3,6 +3,7 @@ package com.example.weatherappproject.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -62,6 +63,7 @@ public class DetailFragment extends Fragment {
     public static final String APP_PREFERENCES_CITY = "mycity";
     public static final String APP_PREFERENCES_AUTO = "auto";
     public static final String COMPLECT_EXTRA="complect";
+    public static final String FRAGMENT_EXTRA="source";
     private String nameUserString;
     private String dayPart;
     private TextView nameUser;
@@ -106,9 +108,10 @@ public class DetailFragment extends Fragment {
         listener=new ComplectAdapter.OnComplectClickListener() {
             @Override
             public void onComplectClick(Complect complect, int position) {
-                Bundle bundle=new Bundle();
-                bundle.putSerializable(COMPLECT_EXTRA,complect);
-                Navigation.findNavController(requireView()).navigate(R.id.action_DetailFragment_to_ComplectFragment,bundle);
+                Intent intent=new Intent(getActivity(),ComplectActivity.class);
+                intent.putExtra(COMPLECT_EXTRA,complect);
+                intent.putExtra(FRAGMENT_EXTRA,"detail");
+                getActivity().startActivity(intent);
             }
         };
         loggedInViewModel = new ViewModelProvider(Objects.requireNonNull(requireActivity())).get(DetailViewModel.class);
