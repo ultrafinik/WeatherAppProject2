@@ -16,4 +16,7 @@
     <string name="shirt">shirt</string>
     <string name="back">Назад</string>
     <string name="addComlpect">Добавить</string>
+    <string name="galary_button">Галерея</string>
+    <string name="camera_button">Камера</string>
+    <string name="save">Сохранить</string>
 </resources>
