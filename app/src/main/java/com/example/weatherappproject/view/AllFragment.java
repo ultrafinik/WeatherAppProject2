@@ -82,6 +82,7 @@ public class AllFragment extends Fragment {
                                     {
                                         if (email.equals(postSnapshot.child("email").getValue().toString())) {
                                             Complect complect = new Complect();
+                                            complect.setKey(postSnapshot.getKey());
                                             complect.setFootwear(postSnapshot.child("Footwear").getValue().toString());
                                             complect.setHeadgear(postSnapshot.child("Headgear").getValue().toString());
                                             complect.setOuterwear(postSnapshot.child("Outerwear").getValue().toString());

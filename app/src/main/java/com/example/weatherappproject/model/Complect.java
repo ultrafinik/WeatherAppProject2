@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Complect implements Serializable
 {
+    private String key;
     private int temp1;
     private int temp2;
     private String footwear;
@@ -13,7 +14,7 @@ public class Complect implements Serializable
     private String Shirt;
     private String email;
 
-    public Complect(int temp1, int temp2, String footwear, String headgear, String outerwear, String pants, String shirt, String email) {
+    public Complect(int temp1, int temp2, String footwear, String headgear, String outerwear, String pants, String shirt, String email,String key) {
         this.temp1 = temp1;
         this.temp2 = temp2;
         this.footwear = footwear;
@@ -22,6 +23,7 @@ public class Complect implements Serializable
         Pants = pants;
         Shirt = shirt;
         this.email = email;
+        this.key=key;
     }
     public Complect() {
     }
@@ -90,4 +92,11 @@ public class Complect implements Serializable
         this.email = email;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -20,8 +22,11 @@ import android.widget.ImageView;
 import com.example.weatherappproject.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class AddEditComplectActivity extends AppCompatActivity {
-    private static final int PICKFILE_RESULT_CODE = 1;
+
     private ImageView fotoImage;
     private Button cameraButton,galaryButton,saveButton;
     private Intent intent;
@@ -37,20 +42,54 @@ public class AddEditComplectActivity extends AppCompatActivity {
         saveButton.setVisibility(View.INVISIBLE);
         if(getIntent().getExtras()!=null)
         {
-            String url=getIntent().getExtras().getString(ComplectActivity.FOOT_WEAR);
-            Picasso.get().load(url).into(fotoImage);
+            String url="";
+            if(getIntent().getExtras().getString(ComplectActivity.FOOT_WEAR)!=null)
+                url=getIntent().getExtras().getString(ComplectActivity.FOOT_WEAR,"");
+            if(getIntent().getExtras().getString(ComplectActivity.HEAD_GEAR)!=null)
+                url=getIntent().getExtras().getString(ComplectActivity.HEAD_GEAR,"");
+            if(getIntent().getExtras().getString(ComplectActivity.OUTER_WEAR)!=null)
+                url=getIntent().getExtras().getString(ComplectActivity.OUTER_WEAR,"");
+            if(getIntent().getExtras().getString(ComplectActivity.PANTS)!=null)
+                url=getIntent().getExtras().getString(ComplectActivity.PANTS,"");
+            if(getIntent().getExtras().getString(ComplectActivity.SHIRT)!=null)
+                url=getIntent().getExtras().getString(ComplectActivity.SHIRT,"");
+            if(!url.equals(""))
+                Picasso.get().load(url).into(fotoImage);
         }
-        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
+        ActivityResultLauncher<Intent> startForResultCamera = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if(result.getResultCode() == Activity.RESULT_OK){
                             intent=result.getData();
+                            intent.putExtra("content","camera");
                             Bundle extras=result.getData().getExtras();
                             saveButton.setVisibility(View.VISIBLE);
                             Bitmap foto=(Bitmap)extras.get("data");
                             fotoImage.setImageBitmap(foto);
+                        }
+                    }
+                });
+        ActivityResultLauncher<Intent> startForResultGallery = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>()
+                {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == Activity.RESULT_OK){
+                            try
+                            {
+                                intent=result.getData();
+                                intent.putExtra("content","galery");
+                                final InputStream imageStream = getContentResolver().openInputStream(intent.getData());
+                                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                                saveButton.setVisibility(View.VISIBLE);
+                                fotoImage.setImageBitmap(selectedImage);
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+
                         }
                     }
                 });
@@ -59,7 +98,18 @@ public class AddEditComplectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 try {
-                    mStartForResult.launch(takePictureIntent);
+                    startForResultCamera.launch(takePictureIntent);
+                } catch (ActivityNotFoundException e) {
+                }
+            }
+        });
+        galaryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent takePictureIntent = new Intent(Intent.ACTION_PICK);
+                takePictureIntent.setType("image/*");
+                try {
+                    startForResultGallery.launch(takePictureIntent);
                 } catch (ActivityNotFoundException e) {
                 }
             }
