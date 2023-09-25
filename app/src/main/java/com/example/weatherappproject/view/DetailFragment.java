@@ -20,6 +20,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -80,7 +81,6 @@ public class DetailFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference bd;
     private List<Complect> listComplect;
-    private ComplectAdapter adapter;
     private ComplectAdapter.OnComplectClickListener listener;
     private int currentWeather;
     @SuppressLint({"SuspiciousIndentation", "MissingInflatedId"})
@@ -108,10 +108,10 @@ public class DetailFragment extends Fragment {
         listener=new ComplectAdapter.OnComplectClickListener() {
             @Override
             public void onComplectClick(Complect complect, int position) {
-                Intent intent=new Intent(getActivity(),ComplectActivity.class);
+                Intent intent=new Intent(getContext(),ComplectActivity.class);
                 intent.putExtra(COMPLECT_EXTRA,complect);
                 intent.putExtra(FRAGMENT_EXTRA,"detail");
-                getActivity().startActivity(intent);
+                getContext().startActivity(intent);
             }
         };
         loggedInViewModel = new ViewModelProvider(Objects.requireNonNull(requireActivity())).get(DetailViewModel.class);
@@ -330,7 +330,8 @@ public class DetailFragment extends Fragment {
 
                                     for (DataSnapshot postSnapshot : snapshot.getChildren())
                                     {
-                                        if (email.equals(postSnapshot.child("email").getValue().toString()))
+                                        String current=(postSnapshot.child("email").getValue()!=null)?postSnapshot.child("email").getValue().toString():"";
+                                        if (email.equals(current))
                                         {
                                             Complect complect = new Complect();
                                             complect.setKey(postSnapshot.getKey());
@@ -340,13 +341,14 @@ public class DetailFragment extends Fragment {
                                             complect.setPants(postSnapshot.child("Pants").getValue().toString());
                                             complect.setShirt(postSnapshot.child("Shirt").getValue().toString());
                                             complect.setEmail(email);
-                                            complect.setTemp1(Integer.parseInt(postSnapshot.child("temp1").getValue().toString()));
-                                            complect.setTemp2(Integer.parseInt(postSnapshot.child("temp2").getValue().toString()));
-                                            if(currentWeather>complect.getTemp1()&&currentWeather<complect.getTemp2())
+                                            complect.setTemp1(Integer.parseInt((postSnapshot.child("temp1").getValue()!=null)?postSnapshot.child("temp1").getValue().toString():"0"));
+                                            complect.setTemp2(Integer.parseInt((postSnapshot.child("temp2").getValue()!=null)?postSnapshot.child("temp1").getValue().toString():"0"));
+                                            if(currentWeather>=complect.getTemp1()&&currentWeather<=complect.getTemp2())
                                                 listComplect.add(complect);
                                         }
                                     }
-                                    adapter = new ComplectAdapter(listComplect, getActivity(),listener);
+                                    ComplectAdapter adapter = new ComplectAdapter(listComplect, listener);
+                                    rv.setLayoutManager(new LinearLayoutManager(getContext()));
                                     rv.setAdapter(adapter);
                                 }
                                 @Override

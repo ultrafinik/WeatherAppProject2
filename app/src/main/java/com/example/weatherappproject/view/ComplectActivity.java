@@ -7,11 +7,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +29,8 @@ import com.example.weatherappproject.model.Complect;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +46,8 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ComplectActivity extends AppCompatActivity {
@@ -50,13 +56,15 @@ public class ComplectActivity extends AppCompatActivity {
     public static final String OUTER_WEAR="outer_wear";
     public static final String PANTS="pants";
     public static final String SHIRT="shirt";
-    private ImageButton headerImage, outwearImage,pantsImage,shirtImage, buttonFootwear;
-    private String source;
+    private ImageButton headerImage, outwearImage,pantsImage,shirtImage, buttonFootwear,buttonSave;
+    private Boolean source;
     private Complect complect;
     private Uri filePath;
     FirebaseStorage storage;
     StorageReference storageReference;
     private FirebaseDatabase bd;
+    private Bitmap footWearBitmap,headerBitmap,outWearBitmap,pantsBitmap,shirtBitmap;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -67,14 +75,15 @@ public class ComplectActivity extends AppCompatActivity {
         outwearImage = findViewById(R.id.outerwear_image);
         pantsImage = findViewById(R.id.pants_image);
         shirtImage = findViewById(R.id.shirt_image);
+        buttonSave=findViewById(R.id.save);
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         Bundle arg=getIntent().getExtras();
         bd = FirebaseDatabase.getInstance();
+        footWearBitmap=headerBitmap=outWearBitmap=pantsBitmap=shirtBitmap=null;
         if(arg!=null)
         {
             complect = (Complect) arg.getSerializable(DetailFragment.COMPLECT_EXTRA);
-            source = arg.getString(DetailFragment.FRAGMENT_EXTRA, "");
             if (complect != null)
             {
                 if (!complect.getFootwear().equals("")) {
@@ -93,6 +102,12 @@ public class ComplectActivity extends AppCompatActivity {
                     Picasso.get().load(complect.getShirt()).into(shirtImage);
                 }
             }
+            String s= getIntent().getExtras().getString(DetailFragment.FRAGMENT_EXTRA,"");
+            if(s.equals("add")) {
+                source=true;
+                buttonSave.setVisibility(View.VISIBLE);
+            }
+
         }
         buttonFootwear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +116,11 @@ public class ComplectActivity extends AppCompatActivity {
                 {
                     Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
                     intent.putExtra(FOOT_WEAR,complect.getFootwear());
+                    footWearResult.launch(intent);
+                }
+                else
+                {
+                    Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
                     footWearResult.launch(intent);
                 }
             }
@@ -114,6 +134,11 @@ public class ComplectActivity extends AppCompatActivity {
                     intent.putExtra(HEAD_GEAR,complect.getHeadgear());
                     headGearResult.launch(intent);
                 }
+                else
+                {
+                    Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
+                    headGearResult.launch(intent);
+                }
             }
         });
         outwearImage.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +148,11 @@ public class ComplectActivity extends AppCompatActivity {
                 {
                     Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
                     intent.putExtra(OUTER_WEAR,complect.getOuterwear());
+                    outwearResult.launch(intent);
+                }
+                else
+                {
+                    Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
                     outwearResult.launch(intent);
                 }
             }
@@ -136,6 +166,11 @@ public class ComplectActivity extends AppCompatActivity {
                     intent.putExtra(PANTS,complect.getPants());
                     pantsResult.launch(intent);
                 }
+                else
+                {
+                    Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
+                    pantsResult.launch(intent);
+                }
             }
         });
         shirtImage.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +182,71 @@ public class ComplectActivity extends AppCompatActivity {
                     intent.putExtra(PANTS,complect.getShirt());
                     shirtResult.launch(intent);
                 }
+                else
+                {
+                    Intent intent=new Intent(ComplectActivity.this,AddEditComplectActivity.class);
+                    shirtResult.launch(intent);
+                }
+            }
+        });
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference newComplect=bd.getReference();
+                UUID uuid=UUID.randomUUID();
+//                newComplect.child("Complects").child("Complect"+uuid.toString()).
+//                        child("Footwear").setValue("super");
+//                newComplect.child("Complects").child("Complect"+uuid.toString()).
+//                        child("Headgear").setValue("super");
+//                newComplect.child("Complects").child("Complect"+uuid.toString()).
+//                        child("Outerwear").setValue("super");
+//                newComplect.child("Complects").child("Complect"+uuid.toString()).
+//                        child("Pants").setValue("super");
+//                newComplect.child("Complects").child("Complect"+uuid.toString()).
+//                        child("Shirt").setValue("super");
+//                ToStorage(footWearBitmap,"Complect"+uuid.toString(),"Footwear");
+//                ToStorage(headerBitmap,"Complect"+uuid.toString(),"Headgear");
+//                ToStorage(outWearBitmap,"Complect"+uuid.toString(),"Outerwear");
+//                ToStorage(pantsBitmap,"Complect"+uuid.toString(),"Pants");
+//                ToStorage(shirtBitmap,"Complect"+uuid.toString(),"Shirt");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                footWearBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+                String uid = UUID.randomUUID().toString();
+                UploadTask uploadTask = storageReference.child(uid).putBytes(data);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        String uri = "https://firebasestorage.googleapis.com" + taskSnapshot.getUploadSessionUri().getPath() + "/" + uid +
+                                "?alt=media";
+                        DatabaseReference chooseComplect = bd.getReference().child("Complects");
+                        chooseComplect.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                chooseComplect.child("Complect"+uuid.toString()).child("Footwear").setValue(uri);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+                FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                newComplect.child("Complects").child("Complect"+uuid.toString()).
+                        child("email").setValue(currentUser.getEmail());
+                newComplect.child("Complects").child("Complect"+uuid.toString()).
+                        child("temp1").setValue(24);
+                newComplect.child("Complects").child("Complect"+uuid.toString()).
+                        child("temp2").setValue(27);
+                setResult(RESULT_OK);
+                finish();
             }
         });
     }
@@ -173,37 +273,42 @@ public class ComplectActivity extends AppCompatActivity {
                                 throw new RuntimeException(e);
                             }
                         }
-                        buttonFootwear.setImageBitmap(picture);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        String uid=UUID.randomUUID().toString();
-                        UploadTask uploadTask = storageReference.child(uid).putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                String uri="https://firebasestorage.googleapis.com"+taskSnapshot.getUploadSessionUri().getPath()+"/"+uid+
-                                        "?alt=media";
-                                DatabaseReference chooseComplect = bd.getReference().child("Complects");
-                                chooseComplect.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        DataSnapshot datas=snapshot.child(complect.getKey());
-                                        DatabaseReference a=datas.child("Footwear").getRef();
-                                        complect.setFootwear(uri);
-                                        a.setValue(uri);
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                        footWearBitmap=Bitmap.createBitmap(picture);
+                        buttonFootwear.setImageBitmap(footWearBitmap);
+                        if(source==false)
+                        {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            String uid = UUID.randomUUID().toString();
+                            UploadTask uploadTask = storageReference.child(uid).putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    String uri = "https://firebasestorage.googleapis.com" + taskSnapshot.getUploadSessionUri().getPath() + "/" + uid +
+                                            "?alt=media";
+                                    DatabaseReference chooseComplect = bd.getReference().child("Complects");
+                                    chooseComplect.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            DataSnapshot datas = snapshot.child(complect.getKey());
+                                            DatabaseReference a = datas.child("Footwear").getRef();
+                                            complect.setFootwear(uri);
+                                            a.setValue(uri);
+                                        }
 
-                                    }
-                                });
-                            }
-                        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -231,36 +336,41 @@ public class ComplectActivity extends AppCompatActivity {
                             }
                         }
                         headerImage.setImageBitmap(picture);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        String uid=UUID.randomUUID().toString();
-                        UploadTask uploadTask = storageReference.child(uid).putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                String uri="https://firebasestorage.googleapis.com"+taskSnapshot.getUploadSessionUri().getPath()+"/"+uid+
-                                        "?alt=media";
-                                DatabaseReference chooseComplect = bd.getReference().child("Complects");
-                                chooseComplect.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        DataSnapshot datas=snapshot.child(complect.getKey());
-                                        DatabaseReference a=datas.child("Headgear").getRef();
-                                        complect.setHeadgear(uri);
-                                        a.setValue(uri);
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                        headerBitmap=picture;
+                        if(source==false)
+                        {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            String uid = UUID.randomUUID().toString();
+                            UploadTask uploadTask = storageReference.child(uid).putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    String uri = "https://firebasestorage.googleapis.com" + taskSnapshot.getUploadSessionUri().getPath() + "/" + uid +
+                                            "?alt=media";
+                                    DatabaseReference chooseComplect = bd.getReference().child("Complects");
+                                    chooseComplect.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            DataSnapshot datas = snapshot.child(complect.getKey());
+                                            DatabaseReference a = datas.child("Headgear").getRef();
+                                            complect.setHeadgear(uri);
+                                            a.setValue(uri);
+                                        }
 
-                                    }
-                                });
-                            }
-                        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -288,36 +398,41 @@ public class ComplectActivity extends AppCompatActivity {
                             }
                         }
                         outwearImage.setImageBitmap(picture);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        String uid=UUID.randomUUID().toString();
-                        UploadTask uploadTask = storageReference.child(uid).putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                String uri="https://firebasestorage.googleapis.com"+taskSnapshot.getUploadSessionUri().getPath()+"/"+uid+
-                                        "?alt=media";
-                                DatabaseReference chooseComplect = bd.getReference().child("Complects");
-                                chooseComplect.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        DataSnapshot datas=snapshot.child(complect.getKey());
-                                        DatabaseReference a=datas.child("Outerwear").getRef();
-                                        complect.setOuterwear(uri);
-                                        a.setValue(uri);
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                        outWearBitmap=picture;
+                        if(source==false)
+                        {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            String uid = UUID.randomUUID().toString();
+                            UploadTask uploadTask = storageReference.child(uid).putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    String uri = "https://firebasestorage.googleapis.com" + taskSnapshot.getUploadSessionUri().getPath() + "/" + uid +
+                                            "?alt=media";
+                                    DatabaseReference chooseComplect = bd.getReference().child("Complects");
+                                    chooseComplect.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            DataSnapshot datas = snapshot.child(complect.getKey());
+                                            DatabaseReference a = datas.child("Outerwear").getRef();
+                                            complect.setOuterwear(uri);
+                                            a.setValue(uri);
+                                        }
 
-                                    }
-                                });
-                            }
-                        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -345,36 +460,40 @@ public class ComplectActivity extends AppCompatActivity {
                             }
                         }
                         pantsImage.setImageBitmap(picture);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        String uid=UUID.randomUUID().toString();
-                        UploadTask uploadTask = storageReference.child(uid).putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                String uri="https://firebasestorage.googleapis.com"+taskSnapshot.getUploadSessionUri().getPath()+"/"+uid+
-                                        "?alt=media";
-                                DatabaseReference chooseComplect = bd.getReference().child("Complects");
-                                chooseComplect.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        DataSnapshot datas=snapshot.child(complect.getKey());
-                                        DatabaseReference a=datas.child("Pants").getRef();
-                                        complect.setPants(uri);
-                                        a.setValue(uri);
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                        pantsBitmap=picture;
+                        if(source==false) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            String uid = UUID.randomUUID().toString();
+                            UploadTask uploadTask = storageReference.child(uid).putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    String uri = "https://firebasestorage.googleapis.com" + taskSnapshot.getUploadSessionUri().getPath() + "/" + uid +
+                                            "?alt=media";
+                                    DatabaseReference chooseComplect = bd.getReference().child("Complects");
+                                    chooseComplect.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            DataSnapshot datas = snapshot.child(complect.getKey());
+                                            DatabaseReference a = datas.child("Pants").getRef();
+                                            complect.setPants(uri);
+                                            a.setValue(uri);
+                                        }
 
-                                    }
-                                });
-                            }
-                        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -402,36 +521,41 @@ public class ComplectActivity extends AppCompatActivity {
                             }
                         }
                         shirtImage.setImageBitmap(picture);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        String uid=UUID.randomUUID().toString();
-                        UploadTask uploadTask = storageReference.child(uid).putBytes(data);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                String uri="https://firebasestorage.googleapis.com"+taskSnapshot.getUploadSessionUri().getPath()+"/"+uid+
-                                        "?alt=media";
-                                DatabaseReference chooseComplect = bd.getReference().child("Complects");
-                                chooseComplect.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        DataSnapshot datas=snapshot.child(complect.getKey());
-                                        DatabaseReference a=datas.child("Shirt").getRef();
-                                        complect.setShirt(uri);
-                                        a.setValue(uri);
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                        shirtBitmap=picture;
+                        if(source==false)
+                        {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+                            String uid = UUID.randomUUID().toString();
+                            UploadTask uploadTask = storageReference.child(uid).putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    String uri = "https://firebasestorage.googleapis.com" + taskSnapshot.getUploadSessionUri().getPath() + "/" + uid +
+                                            "?alt=media";
+                                    DatabaseReference chooseComplect = bd.getReference().child("Complects");
+                                    chooseComplect.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            DataSnapshot datas = snapshot.child(complect.getKey());
+                                            DatabaseReference a = datas.child("Shirt").getRef();
+                                            complect.setShirt(uri);
+                                            a.setValue(uri);
+                                        }
 
-                                    }
-                                });
-                            }
-                        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
             });

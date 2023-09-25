@@ -18,19 +18,18 @@ public class ComplectAdapter extends RecyclerView.Adapter<ComplectAdapter.ViewHo
         void onComplectClick(Complect state, int position);
     }
     private final OnComplectClickListener onClickListener;
-    private LayoutInflater inflater;
+
     private List<Complect> complects;
 
-    public ComplectAdapter(List<Complect> states, Context context, OnComplectClickListener onClickListener) {
+    public ComplectAdapter(List<Complect> states, OnComplectClickListener onClickListener) {
         this.onClickListener = onClickListener;
-        inflater=LayoutInflater.from(context);
         this.complects = states;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.complect_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.complect_item, parent, false);
         return new ViewHolder(view);
     }
 

@@ -28,15 +28,15 @@ public class LoggedInFragment extends Fragment  implements BottomNavigationView
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_loggedin, container, false);
-                bottomNavigationView = view.findViewById(R.id.bottomNavigation);
-                detailFragment=new DetailFragment();
-                profileFragment= new ProfileFragment();
-                allFragment= new AllFragment();
-                bottomNavigationView.setOnNavigationItemSelectedListener(this);
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.flFragment,detailFragment).commit();
-            return view;
-        }
+        View view = inflater.inflate(R.layout.fragment_loggedin, container, false);
+            bottomNavigationView = view.findViewById(R.id.bottomNavigation);
+            detailFragment=new DetailFragment();
+            profileFragment= new ProfileFragment();
+            allFragment= new AllFragment();
+            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, detailFragment).commit();
+        return view;
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override

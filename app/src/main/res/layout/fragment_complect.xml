@@ -60,5 +60,13 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:scaleType="fitCenter"/>
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:padding="10dp"
+                android:id="@+id/save"
+                android:visibility="gone"
+                android:src="@android:drawable/ic_menu_add"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
